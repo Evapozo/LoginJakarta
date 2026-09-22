@@ -2,7 +2,6 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.kotlin
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -37,3 +36,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Windows ###
+Thumbs.db
+
+### Secretos / entornos ###
+.env
+application-local.properties
+application-local.yml
