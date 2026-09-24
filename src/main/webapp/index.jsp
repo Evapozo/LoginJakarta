@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib uri="jakarta.tags.core" prefix = "c" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -43,7 +44,9 @@
 <div class="card">
     <h1>¿Quieres darte de alta en la aplicación?</h1>
     <p>Regístrate en unos segundos y cuéntanos qué tecnología te interesa más.</p>
-    <a class="boton" href="${pageContext.request.contextPath}/alta">Darme de alta</a> //mapping del servlet
+   <!-- mapping del servlet-->
+  <!-- <a class="boton" href="${pageContext.request.contextPath}/alta">Darme de alta</a>-->
+   <a class="boton" href="<c:url value = '/alta' />">Darme de alta</a>
 </div>
 </body>
 </html>

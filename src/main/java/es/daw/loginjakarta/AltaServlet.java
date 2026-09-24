@@ -23,6 +23,9 @@ public class AltaServlet extends HttpServlet {
             List<String> tecnologias = leerFichero("WEB-INF/datos/tecnologias.txt");
             LOGGER.info(tecnologias.toString());
 
+            //los parametros via get si no viajan llegan como null!!
+            //si hago trim de opcional y no se ha enviado en la url como parametro, dara nullpointerexception
+
             //String opcional = request.getParameter("opcional").trim();
 
             request.setAttribute("tecnologias", tecnologias);
@@ -55,6 +58,7 @@ public class AltaServlet extends HttpServlet {
         //EN ESTE PUNTO SE COMPROBARIA EN BD SI EXISTE UN USARIO CON ESE NOMBRE
         //validar parametros
         nombre = nombre == null ? null : nombre.trim();
+        //los parametros no se rellenan llegan vacios
         email = email == null ? null : email.trim();
         tecnologia = tecnologia == null ? null : tecnologia.trim();
         nivel = nivel == null ? null : nivel.trim();
@@ -64,6 +68,11 @@ public class AltaServlet extends HttpServlet {
         LOGGER.info(String.format("tecnologia: %s", tecnologia));
         LOGGER.info(String.format("nivel: %s", nivel));
 
+        if (nombre == null || nombre.isEmpty()) {
+            request.setAttribute("mensaje", "El nombre es obligatorio.");
+            request.getRequestDispatcher("formulario.jsp").forward(request, response);
+            return;
+        }
         //PENDIENTE si el nombre viene vacioque vuelva a la pagina del formulario indicando
         //que el nombre nopuede estar vacio
         //enviar a la JSP como atributos los paramteros
@@ -75,6 +84,8 @@ public class AltaServlet extends HttpServlet {
         //llamar a la pagina CONFIRMACION.JSP
 
         request.getRequestDispatcher("/confirmacion.jsp").forward(request, response);
+
+
 
     }
 
@@ -88,17 +99,26 @@ public class AltaServlet extends HttpServlet {
 
     private List<String> leerFichero(String pathFile) throws IOException {
         List<String> lista = new ArrayList<>();
+
+        //getREsourceAsStream abre un flujo de bytes (InputStream)
         InputStream is = getServletContext().getResourceAsStream(pathFile);
 
         //PENDIENTE!! En vez de propagar IOException, implementar una excepcion propia de tipo checked
         //llamada FicheroTxtNoEncontradoException
         if (is == null)
             throw new IOException("No se encuentra el fichero de texto: " + pathFile);
+
+        //try con recursos: todo lo que se declara dentro del parentesis se cierra automaticamente (close())
+        //buffered reader fuera del try hay que cerrarlo
+        //InputStream: bytes en crudo
+        //InputStreamReader: convierte esos bytes en caracteres segun el charset
+        //BufferedReader: añade un bufefr para leer linea a linea
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String linea;
             while((linea = br.readLine()) != null){
                 if(!linea.isBlank())
-                    lista.add(linea.trim());
+                    //lista.add(linea.trim());
+                    lista.add(linea.strip());
 
 
             }
