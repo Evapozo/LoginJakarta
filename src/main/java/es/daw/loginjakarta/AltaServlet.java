@@ -1,18 +1,17 @@
 package es.daw.loginjakarta;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import es.daw.loginjakarta.exception.TxtNoEncontradoException;
+import es.daw.loginjakarta.util.FileUtil;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
-import static es.daw.loginjakarta.util.FileUtil.leerFichero;
 
 
 @WebServlet("/alta")
@@ -27,8 +26,8 @@ public class AltaServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            tecnologias = leerFichero("/WEB-INF/datos/tecnologias.txt");
-            niveles = leerFichero("/WEB-INF/datos/niveles.txt");
+            tecnologias = FileUtil.leerFichero(getServletContext(),"/WEB-INF/datos/tecnologias.txt");
+            niveles = FileUtil.leerFichero(getServletContext(), "/WEB-INF/datos/niveles.txt");
 
         }catch (IOException | TxtNoEncontradoException e ){
             LOGGER.severe(e.getMessage());
@@ -97,6 +96,7 @@ public class AltaServlet extends HttpServlet {
             request.setAttribute("mensaje","Majete!!! rellena el nombre que es obligatorio!!!!");
             //request.setAttribute("tecnologias",leerFichero("/WEB-INF/datos/tecnologias.txt"));
             request.setAttribute("tecnologias",tecnologias);
+            request.setAttribute("niveles", niveles);
             request.getRequestDispatcher("/formulario.jsp").forward(request,response);
             return;
         }

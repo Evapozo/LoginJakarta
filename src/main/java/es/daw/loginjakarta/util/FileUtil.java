@@ -21,8 +21,8 @@ public class FileUtil {
      * @return List de cadena de texto de cada linea
      * @throws IOException si no existe la ruta
      */
-    private static ServletContext context;
-    public static List<String> leerFichero(String pathFile) throws IOException, TxtNoEncontradoException{
+
+    public static List<String> leerFichero(ServletContext context, String pathFile) throws IOException, TxtNoEncontradoException{
         List<String> lista = new ArrayList<>();
 
         // getResourceAsStream abre un flujo de bytes (InputStream)
@@ -32,11 +32,9 @@ public class FileUtil {
         // llamada FicheroTxtNoEncontradoException...
         if ( is == null)
             //throw new IOException("No se encuentra el fichero de texto: "+pathFile);
-        try {
+
             throw new TxtNoEncontradoException("No se encuentra el fichero de texto: " + pathFile);
-        } catch (TxtNoEncontradoException e) {
-            throw new RuntimeException(e);
-        }
+
 
 
         // try con recursos: todo lo que se declara dentro del paréntesis se cierra automáticamente (close())
